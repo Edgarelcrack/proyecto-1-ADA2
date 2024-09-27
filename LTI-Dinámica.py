@@ -1,30 +1,26 @@
 def costo_minimo_dinamica(source, target, a, d, r, i, k):
     n, m = len(source), len(target)
 
-    # Inicializar la matriz dp con infinito
     dp = [[float('inf')] * (m + 1) for _ in range(n + 1)]
     operations = [[[] for _ in range(m + 1)] for _ in range(n + 1)]
 
-    # Caso base: transformar una cadena vacía en otra cadena vacía
     dp[0][0] = 0
     operations[0][0] = [(source, "No operation")]
 
-    # Llenar la primera columna (eliminar todos los caracteres de source)
     for x in range(1, n + 1):
         dp[x][0] = dp[x - 1][0] + d
         new_source = source[:x - 1]
         operations[x][0] = operations[x - 1][0] + [(new_source, f"delete '{source[x - 1]}'")]
 
-    # Llenar la primera fila (insertar todos los caracteres de target)
+   
     for y in range(1, m + 1):
         dp[0][y] = dp[0][y - 1] + i
         new_source = operations[0][y - 1][-1][0] + target[y - 1]
         operations[0][y] = operations[0][y - 1] + [(new_source, f"insert '{target[y - 1]}'")]
 
-    # Llenar el resto de la matriz dp
     for x in range(1, n + 1):
         for y in range(1, m + 1):
-            # Costo de avanzar o reemplazar
+           
             if source[x - 1] == target[y - 1]:
                 cost_advance = dp[x - 1][y - 1] + a
                 new_source_advance = operations[x - 1][y - 1][-1][0]
@@ -34,15 +30,15 @@ def costo_minimo_dinamica(source, target, a, d, r, i, k):
                 new_source_replace = operations[x - 1][y - 1][-1][0][:x - 1] + target[y - 1] + operations[x - 1][y - 1][-1][0][x:]
                 operation = f"replace '{source[x - 1]}' with '{target[y - 1]}'"
 
-            # Costo de eliminar un carácter
+           
             cost_delete = dp[x - 1][y] + d
             new_source_delete = operations[x - 1][y][-1][0][:x - 1] + operations[x - 1][y][-1][0][x:]
 
-            # Costo de insertar un carácter
+            
             cost_insert = dp[x][y - 1] + i
             new_source_insert = operations[x][y - 1][-1][0][:x] + target[y - 1] + operations[x][y - 1][-1][0][x:]
 
-            # Seleccionar el costo mínimo entre avanzar/reemplazar, eliminar e insertar
+            
             costs = []
             ops = []
 
@@ -66,7 +62,7 @@ def costo_minimo_dinamica(source, target, a, d, r, i, k):
                 costs.append(cost_kill)
                 ops.append(('kill', new_source_kill))
 
-            # Determinar el costo mínimo y la operación
+
             min_cost = min(costs)
             min_index = costs.index(min_cost)
             dp[x][y] = min_cost
@@ -80,17 +76,17 @@ def costo_minimo_dinamica(source, target, a, d, r, i, k):
                 operations[x][y] = operations[x][y - 1] + [(new_source, operation)]
             elif operation == 'kill':
                 operations[x][y] = operations[x - 1][y] + [(new_source, operation)]
-                # Ya aplicamos "kill", podemos retornar
+
                 return dp[x][y], operations[x][y]
 
     return dp[n][m], operations[n][m]
 
-# Ejemplo de uso
-a = 1  # Coste de avanzar
-d = 2  # Coste de borrar
-r = 3  # Coste de reemplazar
-i = 2  # Coste de insertar
-k = 1  # Coste de matar
+
+a = 1  #avanzar
+d = 2  #borrar
+r = 3  #reemplazar
+i = 2  #insertar
+k = 1  #matar
 
 source = "ingeniosossss"
 target = "ingeniero"
