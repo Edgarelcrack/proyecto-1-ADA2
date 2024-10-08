@@ -55,7 +55,7 @@ r = 3  #reemplazar
 i = 2  #insertar
 k = 1  #matar
 
-source = "ingeniosossss"
+source = "ingenioso"
 target = "ingeniero"
 
 min_cost, steps = costo_minimo_voraz(source, target, a, d, r, i, k)
@@ -64,4 +64,4 @@ print(f"El costo mínimo para transformar '{source}' en '{target}' es: {min_cost
 print("\nPasos de la transformación:")
 for state, operation in steps:
    
-    print(f"{state:<15} -> {operation}")
+    print(f"{state:15} -> {operation}")

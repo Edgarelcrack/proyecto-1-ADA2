@@ -88,7 +88,7 @@ r = 3  #reemplazar
 i = 2  #insertar
 k = 1  #matar
 
-source = "ingeniosossss"
+source = ""
 target = "ingeniero"
 
 min_cost, steps = costo_minimo_dinamica(source, target, a, d, r, i, k)
