@@ -55,7 +55,6 @@ def costo_minimo_dinamica(source, target, a, d, r, i, k):
             costs.append(cost_insert)
             ops.append((f"insert '{target[y - 1]}'", new_source_insert))
 
-            # Verificar si hemos alcanzado el final de `target` y sobran caracteres en `source`
             if y == m and x > m:
                 cost_kill = dp[x - 1][y] + k
                 new_source_kill = target
@@ -80,20 +79,3 @@ def costo_minimo_dinamica(source, target, a, d, r, i, k):
                 return dp[x][y], operations[x][y]
 
     return dp[n][m], operations[n][m]
-
-
-a = 1  #avanzar
-d = 2  #borrar
-r = 3  #reemplazar
-i = 2  #insertar
-k = 1  #matar
-
-source = ""
-target = "ingeniero"
-
-min_cost, steps = costo_minimo_dinamica(source, target, a, d, r, i, k)
-
-print(f"El costo mínimo para transformar '{source}' en '{target}' es: {min_cost}")
-print("\nPasos de la transformación:")
-for state, operation in steps:
-    print(f"{state:15} -> {operation}")
