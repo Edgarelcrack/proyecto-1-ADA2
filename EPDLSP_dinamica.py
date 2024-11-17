@@ -30,12 +30,11 @@ def subasta(A, B, ofertas):
 A = 1000  # Total de acciones
 B = 100   # Precio mínimo
 ofertas = [
-    (500, 0, 600),   
-    (450, 100, 400), 
+    (500, 400, 600),   
+    (450, 100, 400),    
     (400, 100, 400), 
     (200, 50, 200)   
 ]
-
 asignacion_optima, valor_total = subasta(A, B, ofertas)
 
 print("Asignación óptima:", asignacion_optima)
