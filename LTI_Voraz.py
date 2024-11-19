@@ -133,8 +133,8 @@ class GreedyWordTransformer:
 
 def main():
     # Example usage
-    source = "ingeneero"
-    target = "ingeniero"
+    source = "ancesta"
+    target = "ancestro"
     
     costs = {
         'advance': 1,  # a
