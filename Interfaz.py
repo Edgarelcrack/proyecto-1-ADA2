@@ -126,8 +126,28 @@ def ejecutar_programa(metodo):
 # Configuración de la ventana principal
 root = tk.Tk()
 root.title("Aplicación Unificada")
-root.geometry("800x700")
+root.geometry("800x650")  
+root.resizable(0, 0)
 
+# Estilos
+style = ttk.Style()
+style.configure("TButton", 
+                font=("Arial", 12),
+                foreground="black", 
+                bg="#0288d1", 
+                padding=10)
+style.map("TButton", background=[("active", "#0277bd")])
+
+style.configure("TNotebook.Tab", 
+                background="#01579b", 
+                foreground="black",  
+                padding=10)
+style.map("TNotebook.Tab", background=[("selected", "#0288d1")])
+
+style.configure("TLabel", font=("Arial", 11), padding=5)
+style.configure("TEntry", padding=5)
+
+# Notebook (pestañas)
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
@@ -135,61 +155,76 @@ notebook.pack(fill="both", expand=True)
 frame_transform = ttk.Frame(notebook)
 notebook.add(frame_transform, text="Transformación de Palabras")
 
-ttk.Label(frame_transform, text="Palabra Fuente:").grid(row=0, column=0, padx=5, pady=5)
-entry_source = ttk.Entry(frame_transform)
-entry_source.grid(row=0, column=1, padx=5, pady=5)
+# Labels y entradas para la pestaña de transformación
+ttk.Label(frame_transform, text="Palabra Fuente:").grid(row=0, column=0, padx=10, pady=10, sticky="e")
+entry_source = ttk.Entry(frame_transform, font=("Arial", 12))
+entry_source.grid(row=0, column=1, padx=10, pady=10)
 
-ttk.Label(frame_transform, text="Palabra Objetivo:").grid(row=1, column=0, padx=5, pady=5)
-entry_target = ttk.Entry(frame_transform)
-entry_target.grid(row=1, column=1, padx=5, pady=5)
+ttk.Label(frame_transform, text="Palabra Objetivo:").grid(row=1, column=0, padx=10, pady=10, sticky="e")
+entry_target = ttk.Entry(frame_transform, font=("Arial", 12))
+entry_target.grid(row=1, column=1, padx=10, pady=10)
 
-ttk.Label(frame_transform, text="Método:").grid(row=2, column=0, padx=5, pady=5)
-combo_method = ttk.Combobox(frame_transform, values=["Dinámica", "Fuerza Bruta", "Voraz"], state="readonly")
-combo_method.grid(row=2, column=1, padx=5, pady=5)
+ttk.Label(frame_transform, text="Método:").grid(row=2, column=0, padx=10, pady=10, sticky="e")
+combo_method = ttk.Combobox(frame_transform, values=["Dinámica", "Fuerza Bruta", "Voraz"], state="readonly", font=("Arial", 12))
+combo_method.grid(row=2, column=1, padx=10, pady=10)
 combo_method.current(0)
 
 button_transform = ttk.Button(frame_transform, text="Ejecutar Transformación", command=run_transformation)
-button_transform.grid(row=3, column=0, columnspan=2, pady=10)
+button_transform.grid(row=3, column=0, columnspan=2, pady=20)
 
-text_result_transform = tk.Text(frame_transform, height=15, width=80)
-text_result_transform.grid(row=4, column=0, columnspan=2, pady=5)
+# Etiqueta de resultado
+ttk.Label(frame_transform, text="Resultado:").grid(row=4, column=0, padx=10, pady=5, sticky="w")
+
+# Creando un frame para el scrollbar
+frame_scroll = ttk.Frame(frame_transform)
+frame_scroll.grid(row=5, column=0, columnspan=2, pady=10, padx=10)
+
+# Agregar el scrollbar
+scrollbar = ttk.Scrollbar(frame_scroll, orient="vertical")
+scrollbar.grid(row=0, column=1, sticky="ns")
+
+# Crear el widget Text
+text_result_transform = tk.Text(frame_scroll, height=15, width=90, font=("Arial", 11), yscrollcommand=scrollbar.set)
+text_result_transform.grid(row=0, column=0, pady=10, padx=10)
+
+# Vincular el scrollbar con el widget Text
+scrollbar.config(command=text_result_transform.yview)
+
 
 # Pestaña Subastas
 frame_subasta = ttk.Frame(notebook)
 notebook.add(frame_subasta, text="Subastas")
 
-ttk.Label(frame_subasta, text="Total de acciones:").grid(row=0, column=0, padx=5, pady=5)
-entry_acciones = ttk.Entry(frame_subasta)
-entry_acciones.grid(row=0, column=1, padx=5, pady=5)
+# Labels y entradas para la pestaña de subastas
+ttk.Label(frame_subasta, text="Total de acciones:").grid(row=0, column=0, padx=10, pady=10, sticky="e")
+entry_acciones = ttk.Entry(frame_subasta, font=("Arial", 12))
+entry_acciones.grid(row=0, column=1, padx=10, pady=10)
 
-ttk.Label(frame_subasta, text="Precio mínimo por acción:").grid(row=1, column=0, padx=5, pady=5)
-entry_precio = ttk.Entry(frame_subasta)
-entry_precio.grid(row=1, column=1, padx=5, pady=5)
+ttk.Label(frame_subasta, text="Precio mínimo por acción:").grid(row=1, column=0, padx=10, pady=10, sticky="e")
+entry_precio = ttk.Entry(frame_subasta, font=("Arial", 12))
+entry_precio.grid(row=1, column=1, padx=10, pady=10)
 
-ttk.Label(frame_subasta, text="Número de oferentes:").grid(row=2, column=0, padx=5, pady=5)
-entry_oferentes = ttk.Entry(frame_subasta)
-entry_oferentes.grid(row=2, column=1, padx=5, pady=5)
-
-button_add_oferentes = ttk.Button(frame_subasta, text="Agregar Oferentes", command=agregar_oferentes)
-button_add_oferentes.grid(row=2, column=2, padx=10, pady=5)
-
-frame_oferentes = ttk.Frame(frame_subasta)
-frame_oferentes.grid(row=3, column=0, columnspan=3, padx=5, pady=5)
+ttk.Label(frame_subasta, text="Número de oferentes:").grid(row=2, column=0, padx=10, pady=10, sticky="e")
+entry_oferentes = ttk.Entry(frame_subasta, font=("Arial", 12))
+entry_oferentes.grid(row=2, column=1, padx=10, pady=10)
 entries_oferentes = []
 
-frame_methods = ttk.Frame(frame_subasta)
-frame_methods.grid(row=4, column=0, columnspan=3, pady=10)
+button_add_oferentes = ttk.Button(frame_subasta, text="Agregar Oferentes", command=agregar_oferentes)
+button_add_oferentes.grid(row=2, column=2, padx=10, pady=10)
 
-button_dinamica = ttk.Button(frame_methods, text="Ejecutar Dinámica", command=lambda: ejecutar_programa("Dinámica"))
-button_dinamica.grid(row=0, column=0, padx=10)
+frame_oferentes = ttk.Frame(frame_subasta)
+frame_oferentes.grid(row=3, column=0, columnspan=3, padx=10, pady=10)
 
-button_bruta = ttk.Button(frame_methods, text="Ejecutar Fuerza Bruta", command=lambda: ejecutar_programa("Fuerza Bruta"))
-button_bruta.grid(row=0, column=1, padx=10)
+button_dinamica = ttk.Button(frame_subasta, text="Ejecutar Dinámica", command=lambda: ejecutar_programa("Dinámica"))
+button_dinamica.grid(row=4, column=0, padx=10, pady=10)
 
-button_voraz = ttk.Button(frame_methods, text="Ejecutar Voraz", command=lambda: ejecutar_programa("Voraz"))
-button_voraz.grid(row=0, column=2, padx=10)
+button_bruta = ttk.Button(frame_subasta, text="Ejecutar Fuerza Bruta", command=lambda: ejecutar_programa("Fuerza Bruta"))
+button_bruta.grid(row=4, column=1, padx=10, pady=10)
 
-text_result_subasta = tk.Text(frame_subasta, height=15, width=80)
-text_result_subasta.grid(row=5, column=0, columnspan=3, pady=5)
+button_voraz = ttk.Button(frame_subasta, text="Ejecutar Voraz", command=lambda: ejecutar_programa("Voraz"))
+button_voraz.grid(row=4, column=2, padx=10, pady=10)
+
+text_result_subasta = tk.Text(frame_subasta, height=15, width=90, font=("Arial", 11))
+text_result_subasta.grid(row=5, column=0, columnspan=3, pady=10, padx=10)
 
 root.mainloop()
