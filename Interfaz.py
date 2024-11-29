@@ -134,25 +134,37 @@ style = ttk.Style()
 style.configure("TButton", 
                 font=("Arial", 12),
                 foreground="black", 
-                bg="#0288d1", 
+                background="#0288d1", 
                 padding=10)
-style.map("TButton", background=[("active", "#0277bd")])
+style.map("TButton", background=[("active", "#0288d1")])
 
 style.configure("TNotebook.Tab", 
-                background="#01579b", 
+                background="#01579b",
                 foreground="black",  
-                padding=10)
-style.map("TNotebook.Tab", background=[("selected", "#0288d1")])
+                padding=10,
+                font=("Arial", 12))
+style.map("TNotebook.Tab", background=[("selected", "#0288d1"), ("active", "#0288d1")])
 
-style.configure("TLabel", font=("Arial", 11), padding=5)
+
+#Estilo para el notebook
+style.configure("Custom.TNotebook", background="#0288d1",
+                borderwidth=0,
+                font=("Arial", 12))
+style.map("Custom.TNotebook", background=[("selected", "#01579b"), ("active", "#01579b")])
+
+
+style.configure("TLabel", font=("Arial", 11), padding=5, background="#e0f7fa", foreground="#01579b")
 style.configure("TEntry", padding=5)
 
 # Notebook (pestañas)
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
+notebook.configure(style="Custom.TNotebook")
+
 
 # Pestaña Transformación de Palabras
-frame_transform = ttk.Frame(notebook)
+frame_transform = ttk.Frame(notebook, style="Custom.TFrame")
+frame_transform.configure(style="Custom.TFrame")
 notebook.add(frame_transform, text="Transformación de Palabras")
 
 # Labels y entradas para la pestaña de transformación
@@ -190,9 +202,9 @@ text_result_transform.grid(row=0, column=0, pady=10, padx=10)
 # Vincular el scrollbar con el widget Text
 scrollbar.config(command=text_result_transform.yview)
 
-
 # Pestaña Subastas
-frame_subasta = ttk.Frame(notebook)
+frame_subasta = ttk.Frame(notebook, style="Custom.TFrame")
+frame_subasta.configure(style="Custom.TFrame")
 notebook.add(frame_subasta, text="Subastas")
 
 # Labels y entradas para la pestaña de subastas
@@ -226,5 +238,8 @@ button_voraz.grid(row=4, column=2, padx=10, pady=10)
 
 text_result_subasta = tk.Text(frame_subasta, height=15, width=90, font=("Arial", 11))
 text_result_subasta.grid(row=5, column=0, columnspan=3, pady=10, padx=10)
+
+# Estilo personalizado para los frames
+style.configure("Custom.TFrame", background="#e0f7fa")
 
 root.mainloop()
