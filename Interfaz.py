@@ -46,21 +46,28 @@ def run_transformation():
         return
 
     try:
+        costs = {
+            'advance': int(entry_cost_advance.get()),
+            'delete': int(entry_cost_delete.get()),
+            'replace': int(entry_cost_replace.get()),
+            'insert': int(entry_cost_insert.get()),
+            'kill': int(entry_cost_kill.get())
+        }
+
         if method == "Dinámica":
             from LTI_Dinamica import costo_minimo_dinamica
-            cost, steps = costo_minimo_dinamica(source, target, 1, 2, 3, 2, 1)
+            cost, steps = costo_minimo_dinamica(source, target, costs['advance'], costs['delete'], costs['replace'], costs['insert'], costs['kill'])
             result_ordered = imprimir_transformacion(source, steps, target)
             text_result_transform.delete(1.0, tk.END)
             text_result_transform.insert(tk.END, f"Costo mínimo: {cost}\nPasos:\n{result_ordered}")
         elif method == "Fuerza Bruta":
             from LTI_Fuerza_Bruta import WordTransformer
-            transformer = WordTransformer(source, target)
+            transformer = WordTransformer(source, target, costs)
             cost, steps = transformer.transform()
             text_result_transform.delete(1.0, tk.END)
             text_result_transform.insert(tk.END, f"Costo mínimo: {cost}\nPasos:\n" + "\n".join([f"{word} -> {op}" for word, op in steps]))
         elif method == "Voraz":
             from LTI_Voraz import GreedyWordTransformer
-            costs = {'advance': 1, 'delete': 2, 'replace': 3, 'insert': 2, 'kill': 1}
             transformer = GreedyWordTransformer(source, target, costs)
             cost, steps = transformer.transform()
             text_result_transform.delete(1.0, tk.END)
@@ -126,8 +133,7 @@ def ejecutar_programa(metodo):
 # Configuración de la ventana principal
 root = tk.Tk()
 root.title("Aplicación Unificada")
-root.geometry("800x650")  
-root.resizable(0, 0)
+root.geometry("800x600")
 
 # Estilos
 style = ttk.Style()
@@ -145,13 +151,11 @@ style.configure("TNotebook.Tab",
                 font=("Arial", 12))
 style.map("TNotebook.Tab", background=[("selected", "#0288d1"), ("active", "#0288d1")])
 
-
-#Estilo para el notebook
+# Estilo para el notebook
 style.configure("Custom.TNotebook", background="#0288d1",
                 borderwidth=0,
                 font=("Arial", 12))
 style.map("Custom.TNotebook", background=[("selected", "#01579b"), ("active", "#01579b")])
-
 
 style.configure("TLabel", font=("Arial", 11), padding=5, background="#e0f7fa", foreground="#01579b")
 style.configure("TEntry", padding=5)
@@ -160,7 +164,6 @@ style.configure("TEntry", padding=5)
 notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 notebook.configure(style="Custom.TNotebook")
-
 
 # Pestaña Transformación de Palabras
 frame_transform = ttk.Frame(notebook, style="Custom.TFrame")
@@ -180,16 +183,45 @@ ttk.Label(frame_transform, text="Método:").grid(row=2, column=0, padx=10, pady=
 combo_method = ttk.Combobox(frame_transform, values=["Dinámica", "Fuerza Bruta", "Voraz"], state="readonly", font=("Arial", 12))
 combo_method.grid(row=2, column=1, padx=10, pady=10)
 combo_method.current(0)
+# Frame para los costos
+frame_costos = ttk.Frame(frame_transform, style="Custom.TFrame")
+frame_costos.grid(row=0, column=2, rowspan=8, padx=20, pady=10, sticky="n")
+
+# Entradas para los costos
+ttk.Label(frame_costos, text="Costo Avanzar:").grid(row=0, column=0, padx=10, pady=5, sticky="e")
+entry_cost_advance = ttk.Entry(frame_costos, font=("Arial", 12))
+entry_cost_advance.grid(row=0, column=1, padx=10, pady=5)
+entry_cost_advance.insert(0, "1")
+
+ttk.Label(frame_costos, text="Costo Borrar:").grid(row=1, column=0, padx=10, pady=5, sticky="e")
+entry_cost_delete = ttk.Entry(frame_costos, font=("Arial", 12))
+entry_cost_delete.grid(row=1, column=1, padx=10, pady=5)
+entry_cost_delete.insert(0, "2")
+
+ttk.Label(frame_costos, text="Costo Reemplazar:").grid(row=2, column=0, padx=10, pady=5, sticky="e")
+entry_cost_replace = ttk.Entry(frame_costos, font=("Arial", 12))
+entry_cost_replace.grid(row=2, column=1, padx=10, pady=5)
+entry_cost_replace.insert(0, "3")
+
+ttk.Label(frame_costos, text="Costo Insertar:").grid(row=3, column=0, padx=10, pady=5, sticky="e")
+entry_cost_insert = ttk.Entry(frame_costos, font=("Arial", 12))
+entry_cost_insert.grid(row=3, column=1, padx=10, pady=5)
+entry_cost_insert.insert(0, "2")
+
+ttk.Label(frame_costos, text="Costo Matar:").grid(row=4, column=0, padx=10, pady=5, sticky="e")
+entry_cost_kill = ttk.Entry(frame_costos, font=("Arial", 12))
+entry_cost_kill.grid(row=4, column=1, padx=10, pady=5)
+entry_cost_kill.insert(0, "1")
 
 button_transform = ttk.Button(frame_transform, text="Ejecutar Transformación", command=run_transformation)
-button_transform.grid(row=3, column=0, columnspan=2, pady=20)
+button_transform.grid(row=8, column=0, columnspan=2, pady=20)
 
 # Etiqueta de resultado
-ttk.Label(frame_transform, text="Resultado:").grid(row=4, column=0, padx=10, pady=5, sticky="w")
+ttk.Label(frame_transform, text="Resultado:").grid(row=9, column=0, padx=10, pady=5, sticky="w")
 
 # Creando un frame para el scrollbar
 frame_scroll = ttk.Frame(frame_transform)
-frame_scroll.grid(row=5, column=0, columnspan=2, pady=10, padx=10)
+frame_scroll.grid(row=10, column=0, columnspan=3, pady=10, padx=10)
 
 # Agregar el scrollbar
 scrollbar = ttk.Scrollbar(frame_scroll, orient="vertical")

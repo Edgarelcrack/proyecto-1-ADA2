@@ -8,16 +8,24 @@ r = 3
 i = 2  
 k = 1  
 
+
+
 @dataclass
 class TransformationResult:
     cost: int
     steps: List[Tuple[str, str]]
 
 class WordTransformer:
-    def __init__(self, source: str, target: str):
+    def __init__(self, source: str, target: str, costs: dict = None):
         self.source = list(source)
         self.target = list(target)
-    
+        self.costs = costs 
+        self.a = self.costs['advance']
+        self.d = self.costs['delete']
+        self.r = self.costs['replace']
+        self.i = self.costs['insert']
+        self.k = self.costs['kill']
+
     @staticmethod
     def advance(word1: List[str], word2: List[str], pos1: int, pos2: int) -> Tuple[List[str], List[str], int, int]:
         return word1, word2, pos1 + 1, pos2 + 1
