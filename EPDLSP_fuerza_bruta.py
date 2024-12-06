@@ -20,7 +20,7 @@ def generar_Combinaciones(A, oferentes, B, gobierno):
         for i in range(len(combination)):
             ingreso += combination[i] * oferentes[i][0]
         Acciones_Sobrantes = A - sum(combination)
-        ingreso += Acciones_Sobrantes * gobierno[0]
+        ingreso += Acciones_Sobrantes * B
         return ingreso
 
     oferentes.append(gobierno)

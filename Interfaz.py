@@ -99,8 +99,8 @@ def agregar_oferentes():
 
 def ejecutar_programa(metodo):
     try:
-        total_acciones = int(entry_acciones.get())
-        precio_minimo = int(entry_precio.get())
+        total_acciones = int(entry_acciones.get())#A
+        precio_minimo = int(entry_precio.get())#B
 
         num_oferentes = int(entry_oferentes.get())
         oferentes = []
@@ -115,7 +115,7 @@ def ejecutar_programa(metodo):
             asignacion_optima, valor_total = subasta(total_acciones, precio_minimo, oferentes)
         elif metodo == "Fuerza Bruta":
             from EPDLSP_fuerza_bruta import generar_Combinaciones
-            gobierno = (100, 0, 1000)
+            gobierno = (precio_minimo, 0, total_acciones)
             asignacion_optima, valor_total = generar_Combinaciones(total_acciones, oferentes, precio_minimo, gobierno)
         elif metodo == "Voraz":
             from EPDLSP_voraz import subasta
