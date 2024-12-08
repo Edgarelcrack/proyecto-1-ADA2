@@ -36,6 +36,8 @@ def imprimir_transformacion(source, steps, target):
 
     return "\n".join(result)
 
+import time
+
 def run_transformation():
     source = entry_source.get()
     target = entry_target.get()
@@ -53,6 +55,8 @@ def run_transformation():
             'insert': int(entry_cost_insert.get()),
             'kill': int(entry_cost_kill.get())
         }
+
+        start_time = time.time()
 
         if method == "Dinámica":
             from LTI_Dinamica import costo_minimo_dinamica
@@ -74,6 +78,10 @@ def run_transformation():
             text_result_transform.insert(tk.END, f"Costo mínimo: {cost}\nPasos:\n" + "\n".join([f"{word} -> {op}" for word, op in steps]))
         else:
             messagebox.showerror("Error", "Seleccione un método válido.")
+
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        text_result_transform.insert(tk.END, f"\nTiempo de ejecución: {elapsed_time:.6f} segundos")
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error: {e}")
 
@@ -99,8 +107,8 @@ def agregar_oferentes():
 
 def ejecutar_programa(metodo):
     try:
-        total_acciones = int(entry_acciones.get())#A
-        precio_minimo = int(entry_precio.get())#B
+        total_acciones = int(entry_acciones.get())
+        precio_minimo = int(entry_precio.get())
 
         num_oferentes = int(entry_oferentes.get())
         oferentes = []
@@ -109,6 +117,8 @@ def ejecutar_programa(metodo):
             mi = int(entries_oferentes[i][1].get())
             Mi = int(entries_oferentes[i][2].get())
             oferentes.append((pi, mi, Mi))
+
+        start_time = time.time()
 
         if metodo == "Dinámica":
             from EPDLSP_dinamica import subasta
@@ -123,10 +133,14 @@ def ejecutar_programa(metodo):
         else:
             raise ValueError("Método no reconocido.")
 
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+
         text_result_subasta.delete(1.0, tk.END)
         text_result_subasta.insert(tk.END, f"Resultados ({metodo}):\n")
         text_result_subasta.insert(tk.END, f"Asignación óptima: {asignacion_optima}\n")
         text_result_subasta.insert(tk.END, f"Valor total: {valor_total}\n")
+        text_result_subasta.insert(tk.END, f"Tiempo de ejecución: {elapsed_time:.6f} segundos\n")
     except Exception as e:
         messagebox.showerror("Error", f"Se produjo un error: {str(e)}")
 
