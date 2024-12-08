@@ -3,6 +3,11 @@ Juan Pablo Escobar Viveros- 2259519
 Edgar Andrés Vargas García - 2259690
 Cristian David Rivera Torres - 2259742
 
+REQUISITOS PREVIOS
+
+✅ Python 3.8+
+✅ Biblioteca statistics (incluida por defecto en Python).
+
 
 Este proyecto implementa y evalúa tres enfoques para resolver
 diferentes metodos al problema de la Interfaz inteligente y al problema de la subasta
